@@ -31,8 +31,9 @@ export default function AdminResumePage() {
     if (!file) return;
 
     // Validate file type
-    if (file.type !== "application/pdf") {
-      toast.error("Invalid file type. Only PDF files are allowed.");
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error("Invalid file type. Only JPG, PNG, and WebP images are allowed.");
       return;
     }
 
@@ -90,7 +91,7 @@ export default function AdminResumePage() {
             Resume Management
           </h1>
           <p className="mt-2 text-sm text-gray-700">
-            Upload and manage your resume PDF
+            Upload and manage your resume image
           </p>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -164,7 +165,7 @@ export default function AdminResumePage() {
             </h3>
             <div className="mt-2 max-w-xl text-sm text-gray-500">
               <p>
-                Upload a new PDF resume to Cloudinary. After uploading, copy the
+                Upload a new resume image to Cloudinary. After uploading, copy the
                 URL and update your{" "}
                 <code className="bg-gray-100 px-1 py-0.5 rounded">
                   CLOUDINARY_RESUME_URL
@@ -177,7 +178,7 @@ export default function AdminResumePage() {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="application/pdf"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
                   onChange={handleFileUpload}
                   disabled={isUploading}
                   className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 disabled:opacity-50"
@@ -186,7 +187,7 @@ export default function AdminResumePage() {
                   <span className="text-sm text-gray-500">Uploading...</span>
                 )}
               </div>
-              <p className="text-xs text-gray-500">PDF files only. Max 10MB.</p>
+              <p className="text-xs text-gray-500">JPG, PNG, or WebP images only. Max 10MB.</p>
 
               {uploadedUrl && (
                 <div className="mt-4 p-4 bg-green-50 rounded-md">
@@ -242,7 +243,7 @@ export default function AdminResumePage() {
             </h3>
             <div className="mt-2 text-sm text-blue-700">
               <ol className="list-decimal list-inside space-y-2">
-                <li>Upload your new resume PDF using the form above</li>
+                <li>Upload your resume as an image (JPG, PNG, or WebP) using the form above</li>
                 <li>Copy the generated Cloudinary URL</li>
                 <li>
                   Update the{" "}

@@ -3,13 +3,13 @@ import { checkAdminAuth } from "@/lib/auth-utils";
 import { uploadToCloudinary } from "@/lib/cloudinary/config";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_TYPES = ["application/pdf"];
+const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 /**
  * @swagger
  * /api/resume/upload:
  *   post:
- *     summary: Upload a resume PDF
+ *     summary: Upload a resume image
  *     tags: [Resume]
  *     security:
  *       - cookieAuth: []
@@ -25,7 +25,7 @@ const ALLOWED_TYPES = ["application/pdf"];
  *               file:
  *                 type: string
  *                 format: binary
- *                 description: PDF file (max 10MB)
+ *                 description: Image file - JPG, PNG, or WebP (max 10MB)
  *     responses:
  *       200:
  *         description: Resume uploaded successfully
@@ -37,7 +37,7 @@ const ALLOWED_TYPES = ["application/pdf"];
  *                 url:
  *                   type: string
  *                   format: uri
- *                   description: Cloudinary URL of the uploaded resume
+ *                   description: Cloudinary URL of the uploaded resume image
  *       400:
  *         description: Invalid file or validation error
  *       401:
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     // Validate file type
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: "Invalid file type. Only PDF files are allowed." },
+        { error: "Invalid file type. Only JPG, PNG, and WebP images are allowed." },
         { status: 400 }
       );
     }
@@ -83,10 +83,10 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Upload to Cloudinary with raw resource type for PDF
+    // Upload to Cloudinary as image
     const url = await uploadToCloudinary(buffer, {
       folder: "resume",
-      resourceType: "raw",
+      resourceType: "image",
     });
 
     return NextResponse.json({ url }, { status: 200 });

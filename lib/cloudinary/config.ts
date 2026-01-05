@@ -36,6 +36,7 @@ export async function uploadToCloudinary(
     const uploadOptions: Record<string, unknown> = {
       folder: `portfolio/${folder}`,
       resource_type: resourceType,
+      access_mode: "public", // Ensure files are publicly accessible
     };
 
     if (allowedFormats) {
@@ -73,25 +74,10 @@ export async function deleteFromCloudinary(
   });
 }
 
-/**
- * Extract public_id from a Cloudinary URL
- * @param url - Cloudinary URL
- * @returns Public ID or null if not a valid Cloudinary URL
- */
-export function getPublicIdFromUrl(url: string): string | null {
-  if (!url || !url.includes("cloudinary.com")) {
-    return null;
-  }
-
-  // Match pattern: .../upload/v{version}/{public_id}.{extension}
-  // or: .../upload/{public_id}.{extension}
-  const match = url.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[^.]+)?$/);
-  return match ? match[1] : null;
-}
-
-/**
- * Check if a URL is a Cloudinary URL
- */
-export function isCloudinaryUrl(url: string): boolean {
-  return url?.includes("res.cloudinary.com") ?? false;
-}
+// Re-export client-safe utility functions
+// These can be used in both client and server components
+export {
+  getPublicIdFromUrl,
+  isCloudinaryUrl,
+  getCloudinaryPdfUrl,
+} from "./utils";

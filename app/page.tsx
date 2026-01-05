@@ -216,30 +216,28 @@ export default function Home() {
           {!loadingBlogs &&
             hasBlogs &&
             blogs.map((post) => (
-              <Card
-                key={post.id}
-                className="hover:border-primary transition-all hover:scale-[1.02] bg-card/50 backdrop-blur"
-              >
-                <CardContent className="p-6">
-                  <div className="aspect-video bg-muted rounded-lg mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="hover:underline"
-                    >
-                      {post.title}
-                    </Link>
-                  </h3>
-                  {post.excerpt && (
-                    <p className="text-muted-foreground text-sm line-clamp-2">
-                      {post.excerpt}
-                    </p>
-                  )}
-                  <p className="text-xs text-muted-foreground mt-2">
-                    {new Date(post.createdAt).toLocaleDateString()}
-                  </p>
-                </CardContent>
-              </Card>
+              <Link key={post.id} href={`/blog/${post.slug}`}>
+                <Card className="group hover:border-primary transition-all hover:scale-[1.02] bg-card/50 backdrop-blur overflow-hidden h-full">
+                  <div className="aspect-video relative overflow-hidden bg-muted">
+                    <div className="absolute inset-0 bg-linear-to-br from-primary/20 to-purple-500/20" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <p className="text-2xl md:text-3xl font-bold text-white text-center px-4 text-balance">
+                        {post.title}
+                      </p>
+                    </div>
+                  </div>
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                      <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    {post.excerpt && (
+                      <p className="text-sm text-muted-foreground line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           {!loadingBlogs && !hasBlogs && (
             <p className="text-muted-foreground">No blog posts yet.</p>
@@ -278,43 +276,44 @@ export default function Home() {
           {!loadingProjects &&
             hasProjects &&
             projects.map((project) => (
-              <Card
-                key={project.id}
-                className="hover:border-primary transition-all hover:scale-[1.02] bg-card/50 backdrop-blur"
-              >
-                <CardContent className="p-6">
-                  <div className="aspect-video relative overflow-hidden bg-muted rounded-lg mb-4">
+              <Link key={project.id} href={`/projects/${project.id}`}>
+                <Card className="group hover:border-primary transition-all hover:scale-[1.02] bg-card/50 backdrop-blur overflow-hidden h-full">
+                  <div className="aspect-video relative overflow-hidden bg-muted">
                     {project.image ? (
                       <img
                         src={project.image}
                         alt={project.title}
                         className="w-full h-full object-cover"
                       />
-                    ) : null}
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 bg-linear-to-br from-primary/20 to-purple-500/20" />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <p className="text-2xl md:text-3xl font-bold text-white text-center px-4 text-balance">
+                            {project.title}
+                          </p>
+                        </div>
+                      </>
+                    )}
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">
-                    <Link
-                      href={`/projects/${project.id}`}
-                      className="hover:underline"
-                    >
-                      {project.title}
-                    </Link>
-                  </h3>
-                  <p className="text-muted-foreground text-sm line-clamp-2">
-                    {extractTextFromTipTap(project.description)}
-                  </p>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {project.tags.slice(0, 3).map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-1 bg-secondary text-secondary-foreground rounded text-xs"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                  <CardContent className="p-6">
+                    <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                    <p className="text-muted-foreground text-sm line-clamp-2">
+                      {extractTextFromTipTap(project.description)}
+                    </p>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {project.tags.slice(0, 3).map((tag) => (
+                        <span
+                          key={tag}
+                          className="px-2 py-1 bg-secondary text-secondary-foreground rounded text-xs"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           {!loadingProjects && !hasProjects && (
             <p className="text-muted-foreground">No projects yet.</p>

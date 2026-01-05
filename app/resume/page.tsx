@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Download, FileText, Loader2 } from "lucide-react";
+import { ArrowLeft, Download, FileText, Loader2, ExternalLink } from "lucide-react";
 
 export default function ResumePage() {
   const [resumeUrl, setResumeUrl] = useState<string | null>(null);
@@ -58,7 +59,7 @@ export default function ResumePage() {
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold">Resume</h1>
             <p className="text-muted-foreground text-lg">
-              Download my resume or view it online
+              View my resume or download it
             </p>
           </div>
 
@@ -77,17 +78,17 @@ export default function ResumePage() {
             </Card>
           ) : (
             <>
-              {/* Download button */}
-              <div className="flex justify-center gap-4">
+              {/* Action buttons */}
+              <div className="flex justify-center gap-4 flex-wrap">
                 <Button
                   size="lg"
                   className="font-mono"
                   render={
                     <a
                       href={resumeUrl}
+                      download="resume"
                       target="_blank"
                       rel="noopener noreferrer"
-                      download
                     />
                   }
                   nativeButton={false}
@@ -108,19 +109,24 @@ export default function ResumePage() {
                   }
                   nativeButton={false}
                 >
-                  <FileText className="w-4 h-4 mr-2" />
-                  View in New Tab
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View Full Size
                 </Button>
               </div>
 
-              {/* PDF Viewer */}
+              {/* Resume Image Viewer */}
               <Card className="bg-card/50 backdrop-blur border-border/40 overflow-hidden">
-                <CardContent className="p-0">
-                  <iframe
-                    src={`${resumeUrl}#toolbar=0`}
-                    className="w-full h-[800px] border-0"
-                    title="Resume PDF"
-                  />
+                <CardContent className="p-4">
+                  <div className="relative w-full">
+                    <Image
+                      src={resumeUrl}
+                      alt="Resume"
+                      width={800}
+                      height={1100}
+                      className="w-full h-auto rounded-lg shadow-lg"
+                      priority
+                    />
+                  </div>
                 </CardContent>
               </Card>
             </>
