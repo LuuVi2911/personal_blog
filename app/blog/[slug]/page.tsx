@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { renderTipTapToHtml } from "@/lib/utils/tiptap";
 
-
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -99,11 +98,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm [&_code]:text-foreground"
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
-
-          <div className="pt-6 border-t border-border/60">
-            <h3 className="text-lg font-semibold mb-2">Comments</h3>
-            <p className="text-muted-foreground text-sm">Loading comments...</p>
-          </div>
         </article>
       </div>
     </div>

@@ -92,22 +92,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               }}
             />
           </div>
-
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold">Tags</h3>
-            <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="secondary"
-                  className="font-mono text-xs"
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
           <div className="space-y-3">
             <h3 className="text-lg font-semibold">Tech Stack</h3>
             <div className="flex flex-wrap gap-2">
@@ -121,11 +105,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 </Badge>
               ))}
             </div>
-          </div>
-
-          <div className="pt-6 border-t border-border/60">
-            <h3 className="text-lg font-semibold mb-2">Comments</h3>
-            <p className="text-muted-foreground text-sm">Loading comments...</p>
           </div>
         </article>
       </div>
