@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
+    "type-check": "tsc --noEmit",
+    "security-audit": "npm audit --audit-level=moderate",
     "db:up": "docker-compose up -d",
     "db:down": "docker-compose down",
     "db:studio": "prisma studio --config ./prisma.config.ts",
