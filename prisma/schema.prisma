@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider     = "prisma-client-js"
   output       = "../generated/prisma"
   moduleFormat = "cjs"
 }
@@ -12,7 +12,7 @@ model Blog {
   id        String   @id @default(cuid())
   title     String
   slug      String   @unique
-  ///[Content]
+  /// [Content]
   content   Json     @db.Json
   excerpt   String?
   tags      String[]
@@ -26,7 +26,7 @@ model Blog {
 model Project {
   id          String   @id @default(cuid())
   title       String
-  ///[Description]
+  /// [Description]
   description Json     @db.Json
   image       String?
   github      String?
@@ -37,4 +37,3 @@ model Project {
 
   @@map("projects")
 }
-

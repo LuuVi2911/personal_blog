@@ -6,9 +6,9 @@ services:
     container_name: portfolio-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-portfolio}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-portfolio123}
-      POSTGRES_DB: ${POSTGRES_DB:-portfolio_db}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
