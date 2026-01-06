@@ -103,6 +103,7 @@
     "@types/node": "^25",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/swagger-ui-react": "^5.18.0",
     "@types/turndown": "^5.0.6",
     "postcss": "^8.5",
     "tailwindcss": "^4.1.18",

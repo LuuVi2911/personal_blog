@@ -16,7 +16,6 @@ const globalForPrisma = globalThis as unknown as {
 // Note: The adapter pattern is used for connection pooling and better performance
 const createPrismaClient = () => {
   return new PrismaClient({
-    // @ts-expect-error - Adapter support may vary by Prisma version
     adapter,
     log:
       process.env.NODE_ENV === "development"

@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma/client';
-import { updateBlogSchema } from '@/lib/api/validators';
-import { checkAdminAuth } from '@/lib/auth-utils';
-import { z } from 'zod';
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma/client";
+import { updateBlogSchema } from "@/lib/api/validators";
+import { checkAdminAuth } from "@/lib/auth-utils";
+import { z } from "zod";
+import type { Prisma } from "@/generated/prisma";
 
 interface RouteParams {
   params: Promise<{ slug: string }>;
@@ -41,10 +42,7 @@ interface RouteParams {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-export async function GET(
-  request: NextRequest,
-  { params }: RouteParams
-) {
+export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
     const { slug } = await params;
 
@@ -60,16 +58,16 @@ export async function GET(
 
     if (!blog) {
       return NextResponse.json(
-        { error: 'Blog post not found' },
+        { error: "Blog post not found" },
         { status: 404 }
       );
     }
 
     return NextResponse.json(blog);
   } catch (error) {
-    console.error('Error fetching blog:', error);
+    console.error("Error fetching blog:", error);
     return NextResponse.json(
-      { error: 'Failed to fetch blog post' },
+      { error: "Failed to fetch blog post" },
       { status: 500 }
     );
   }
@@ -151,10 +149,7 @@ export async function GET(
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-export async function PUT(
-  request: NextRequest,
-  { params }: RouteParams
-) {
+export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
     // Check admin authentication
     const adminEmail = await checkAdminAuth();
@@ -174,7 +169,7 @@ export async function PUT(
 
     if (!existingBlog) {
       return NextResponse.json(
-        { error: 'Blog post not found' },
+        { error: "Blog post not found" },
         { status: 404 }
       );
     }
@@ -194,32 +189,39 @@ export async function PUT(
 
       if (slugConflict) {
         return NextResponse.json(
-          { error: 'Blog post with this slug already exists' },
+          { error: "Blog post with this slug already exists" },
           { status: 409 }
         );
       }
     }
 
+    // Transform validated data to Prisma-compatible format
+    const prismaUpdateData: Prisma.BlogUpdateInput = {
+      ...validatedData,
+      content: validatedData.content
+        ? (validatedData.content as Prisma.InputJsonValue)
+        : undefined,
+    };
+
     // Update blog post
     const blog = await prisma.blog.update({
       where: { slug },
-      data: validatedData,
+      data: prismaUpdateData,
     });
 
     return NextResponse.json(blog);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation failed', details: error.errors },
+        { error: "Validation failed", details: error.issues },
         { status: 400 }
       );
     }
 
-    console.error('Error updating blog:', error);
+    console.error("Error updating blog:", error);
     return NextResponse.json(
-      { error: 'Failed to update blog post' },
+      { error: "Failed to update blog post" },
       { status: 500 }
     );
   }
 }
-

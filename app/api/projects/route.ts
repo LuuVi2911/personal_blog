@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma/client';
 import { createProjectSchema, projectQuerySchema } from '@/lib/api/validators';
 import { checkAdminAuth } from '@/lib/auth-utils';
 import { z } from 'zod';
+import type { Prisma } from '@/generated/prisma';
 
 /**
  * @swagger
@@ -73,7 +74,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid query parameters', details: error.errors },
+        { error: 'Invalid query parameters', details: error.issues },
         { status: 400 }
       );
     }
@@ -169,19 +170,23 @@ export async function POST(request: NextRequest) {
       date: body.date ? new Date(body.date).toISOString() : undefined,
     });
 
+    // Transform validated data to Prisma-compatible format
+    const prismaCreateData: Prisma.ProjectCreateInput = {
+      ...validatedData,
+      description: validatedData.description as Prisma.InputJsonValue,
+      date: new Date(validatedData.date),
+    };
+
     // Create project
     const project = await prisma.project.create({
-      data: {
-        ...validatedData,
-        date: new Date(validatedData.date),
-      },
+      data: prismaCreateData,
     });
 
     return NextResponse.json(project, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Validation failed', details: error.errors },
+        { error: 'Validation failed', details: error.issues },
         { status: 400 }
       );
     }

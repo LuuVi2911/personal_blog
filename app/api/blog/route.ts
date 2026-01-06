@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma/client";
 import { createBlogSchema } from "@/lib/api/validators";
 import { checkAdminAuth } from "@/lib/auth-utils";
 import { z } from "zod";
+import type { Prisma } from "@/generated/prisma";
 
 /**
  * @swagger
@@ -155,16 +156,22 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Transform validated data to Prisma-compatible format
+    const prismaCreateData: Prisma.BlogCreateInput = {
+      ...validatedData,
+      content: validatedData.content as Prisma.InputJsonValue,
+    };
+
     // Create blog post
     const blog = await prisma.blog.create({
-      data: validatedData,
+      data: prismaCreateData,
     });
 
     return NextResponse.json(blog, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Validation failed", details: error.errors },
+        { error: "Validation failed", details: error.issues },
         { status: 400 }
       );
     }

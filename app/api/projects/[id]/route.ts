@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma/client";
 import { updateProjectSchema } from "@/lib/api/validators";
 import { checkAdminAuth } from "@/lib/auth-utils";
 import { z } from "zod";
+import type { Prisma } from "@/generated/prisma";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -164,31 +165,29 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       date: body.date ? new Date(body.date).toISOString() : undefined,
     });
 
-    // Prepare update data - convert date string to Date object for Prisma
-    const { date, ...rest } = validatedData;
-    const updateData: {
-      title?: string;
-      description?: string;
-      image?: string;
-      github?: string;
-      tags?: string[];
-      date?: Date;
-    } = { ...rest };
+    // Transform validated data to Prisma-compatible format
+    const { date, description, ...rest } = validatedData;
+    const prismaUpdateData: Prisma.ProjectUpdateInput = {
+      ...rest,
+      description: description
+        ? (description as Prisma.InputJsonValue)
+        : undefined,
+    };
     if (date) {
-      updateData.date = new Date(date);
+      prismaUpdateData.date = new Date(date);
     }
 
     // Update project
     const project = await prisma.project.update({
       where: { id },
-      data: updateData,
+      data: prismaUpdateData,
     });
 
     return NextResponse.json(project);
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Validation failed", details: error.errors },
+        { error: "Validation failed", details: error.issues },
         { status: 400 }
       );
     }
