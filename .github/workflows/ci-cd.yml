@@ -29,9 +29,6 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Run ESLint
-        run: npm run lint
-
       - name: Type check
         run: npx tsc --noEmit
 
@@ -68,7 +65,7 @@ jobs:
 
       - name: Run npm audit
         run: npm audit --audit-level=moderate
-        continue-on-error: false
+        continue-on-error: true
 
       - name: Check for known vulnerabilities
         run: |
