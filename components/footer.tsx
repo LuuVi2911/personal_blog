@@ -2,12 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-  Github,
-  Linkedin,
-  Mail,
-  ArrowUp,
-} from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
 
 export function Footer() {
   return (
@@ -109,8 +104,6 @@ export function Footer() {
               variant="ghost"
               size="sm"
               className="hover:text-foreground transition-colors"
-              render={<Link href="/privacy" />}
-              nativeButton={false}
             >
               Privacy Policy
             </Button>
@@ -118,8 +111,6 @@ export function Footer() {
               variant="ghost"
               size="sm"
               className="hover:text-foreground transition-colors"
-              render={<Link href="/terms" />}
-              nativeButton={false}
             >
               Terms of Service
             </Button>
