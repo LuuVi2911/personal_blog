@@ -11,10 +11,10 @@ export default function AboutPage() {
   const skills = {
     languages: [
       { name: "JavaScript", icon: "/images/javascript.jpg" },
-      { name: "TypeScript", icon: "/images/typescript.svg" },
+      { name: "TypeScript", icon: "/images/Typescript.svg" },
       { name: "Python", icon: "/images/python.png" },
       { name: "Java", icon: "/images/java.png" },
-      { name: "SQL", icon: "/images/sql.png" },
+      { name: "SQL", icon: "/images/SQL.png" },
       { name: "HTML", icon: "/images/html.png" },
       { name: "CSS", icon: "/images/css.png" },
     ],
